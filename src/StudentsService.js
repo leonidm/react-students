@@ -32,6 +32,18 @@ class StudentsService {
   getStudent(id) {
     return this.instance.get(`/students/${id}`);
   }
+
+  addStudent(student){
+    return this.instance.post(`/students`, student);
+  }
+
+  updateStudent(student){
+    return this.instance.put(`/students/${student.id}`, student);
+  }
+
+  deleteStudent(id){
+    return this.instance.delete(`/students/${id}`);
+  }
 }
 
 export const service = new StudentsService();

@@ -1,16 +1,21 @@
 import React, { Component, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { service as studentService } from "./StudentsService";
 
 export default function EditStudent(props) {
-  const [inputs, setInputs] = useState(props.student || {});
+  const [inputs, setInputs] = useState(props.student || {gender: 'Male'});
   let params = useParams();
+  let navigate = useNavigate();
   let id = params.id;
 
   useEffect(async () => {
     if (!props.student && id) {
-      const result = await studentService.getStudent(id);
-      setInputs(result.data);
+      try {
+        const result = await studentService.getStudent(id);
+        setInputs(result.data);
+      } catch (e) {
+        setInputs({gender: 'Male'});
+      }
     }
     return () => {};
   }, []);
@@ -21,14 +26,19 @@ export default function EditStudent(props) {
     setInputs((values) => ({ ...values, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    alert(JSON.stringify(inputs));
-    if (id) {
-      //put
-    } else {
-      //post
+    //alert(JSON.stringify(inputs));
+    try {
+      if (id) {
+        const result = await studentService.updateStudent(inputs);
+      } else {
+        const result = await studentService.addStudent(inputs);
+      }
+    } catch (e) {
+      console.error(`ERROR: `, e);
     }
+    navigate("/main");
   };
 
   return (
@@ -65,7 +75,7 @@ export default function EditStudent(props) {
           </div>
 
           <div class="mb-3">
-            <label for="gendeer" class="form-label">
+            <label for="gender" class="form-label">
               Gender:
             </label>
             <select

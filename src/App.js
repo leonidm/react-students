@@ -14,8 +14,9 @@ function App() {
         <Routes>
           <Route path="/" element={<MainList />} />
           <Route path="/main" element={<MainList />} />
-          <Route path="/student/:id" element={<Student />} />
           <Route path="/student/edit/:id" element={<EditStudent />} />
+          <Route path="/student/add" element={<EditStudent />} />
+          <Route path="/student/:id" element={<Student />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<MainList />} />
         </Routes>
